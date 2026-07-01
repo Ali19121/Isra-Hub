@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Isra Portal Hub — Institutional Systems</title>
+<meta name="description" content="A single hub for every Isra administrative system — Mail Correspondence, School Test, Fehm-ul-Quran Course Management, Quran Academy, and ERP." />
+
+<link rel="manifest" href="./manifest.json" />
+<meta name="theme-color" content="#0B2F30" />
+<link rel="icon" href="./icons/icon-192.png" />
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Isra Portals" />
+<meta name="mobile-web-app-capable" content="yes" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --teal-950:#0B2F30;
+    --teal-900:#0E3A3B;
+    --teal-800:#124C4B;
+    --teal-700:#1D6B67;
+    --teal-600:#28847F;
+    --gold-500:#C9A227;
+    --gold-300:#E4C767;
+    --gold-100:#F1E3B4;
+    --ivory-50:#F7F4EC;
+    --ivory-100:#EFEADD;
+    --ink-900:#1E2422;
+    --ink-600:#57615C;
+    --ink-400:#8A938E;
+    --brick-600:#A8433B;
+    --line: rgba(30,36,34,0.12);
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --ease-spring: cubic-bezier(.2,.9,.25,1.25);
+    --ease-smooth: cubic-bezier(.4,0,.2,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--ivory-50);
+    color:var(--ink-900);
+    font-family:var(--sans);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:env(safe-area-inset-bottom);
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  /* ---------- Ambient animated background ---------- */
+  .bg-orb{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(60px);
+    opacity:.25;
+    pointer-events:none;
+    z-index:0;
+  }
+  .bg-orb.a{
+    width:340px;height:340px;
+    background:radial-gradient(circle, var(--gold-300), transparent 70%);
+    top:-120px; left:-90px;
+    animation:float-a 16s ease-in-out infinite;
+  }
+  .bg-orb.b{
+    width:300px;height:300px;
+    background:radial-gradient(circle, var(--teal-700), transparent 70%);
+    top:30%; right:-120px;
+    animation:float-b 20s ease-in-out infinite;
+  }
+  .bg-orb.c{
+    width:260px;height:260px;
+    background:radial-gradient(circle, var(--gold-500), transparent 70%);
+    bottom:-100px; left:20%;
+    animation:float-c 18s ease-in-out infinite;
+    opacity:.16;
+  }
+  @keyframes float-a{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(40px,60px) scale(1.15);}}
+  @keyframes float-b{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-50px,40px) scale(1.1);}}
+  @keyframes float-c{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,-40px) scale(1.2);}}
+
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;}
+
+  .wrap{
+    max-width:580px;
+    margin:0 auto;
+    padding:0 20px 44px;
+    position:relative;
+    z-index:1;
+  }
+
+  .scroll-bar{
+    position:fixed; top:0; left:0; height:3px;
+    background:linear-gradient(90deg, var(--gold-500), var(--gold-300));
+    width:0%;
+    z-index:50;
+    transition:width .08s linear;
+  }
+
+  /* ---------- Header ---------- */
+  header.letterhead{
+    background:
+      radial-gradient(1200px 260px at 15% -20%, rgba(201,162,39,0.20), transparent 60%),
+      linear-gradient(180deg, var(--teal-950), var(--teal-900));
+    background-size:200% 200%;
+    animation:mesh-shift 12s ease-in-out infinite;
+    color:var(--ivory-50);
+    padding:calc(26px + env(safe-area-inset-top)) 20px 22px;
+    border-bottom-left-radius:24px;
+    border-bottom-right-radius:24px;
+    position:sticky;
+    top:0;
+    z-index:10;
+    overflow:hidden;
+    transition:padding .3s var(--ease-smooth);
+  }
+  header.letterhead.is-compact{padding:calc(13px + env(safe-area-inset-top)) 20px 13px;}
+  header.letterhead.is-compact .brand-title{font-size:1.2rem;}
+  header.letterhead.is-compact .brand-sub{opacity:0; max-height:0;}
+  header.letterhead.is-compact .seal-mini{width:36px;height:36px;}
+  @keyframes mesh-shift{0%,100%{background-position:0% 0%, 0% 0%;}50%{background-position:60% 40%, 0% 0%;}}
+  header.letterhead::after{
+    content:"";
+    position:absolute; left:0;right:0;bottom:0; height:3px;
+    background:repeating-linear-gradient(90deg, var(--gold-500) 0 10px, transparent 10px 18px);
+    opacity:.7;
+  }
+  .letterhead-inner{
+    max-width:580px; margin:0 auto;
+    display:flex; align-items:center; gap:14px;
+  }
+  .seal-mini{
+    flex:0 0 auto; width:50px;height:50px;
+    animation:seal-spin 50s linear infinite;
+    transition:width .3s var(--ease-smooth), height .3s var(--ease-smooth);
+    filter:drop-shadow(0 0 8px rgba(201,162,39,0.35));
+  }
+  @keyframes seal-spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  .brand-text{flex:1 1 auto;min-width:0;}
+  .brand-eyebrow{
+    font-family:var(--mono); font-size:.65rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--gold-300); margin:0 0 4px; display:flex; align-items:center; gap:6px;
+  }
+  .brand-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold-300);animation:pulse-dot 1.8s ease-in-out infinite;}
+  @keyframes pulse-dot{0%,100%{opacity:1; transform:scale(1);}50%{opacity:.4; transform:scale(.7);}}
+  h1.brand-title{
+    font-family:var(--serif); font-weight:600; font-size:1.55rem; line-height:1.15;
+    margin:0 0 4px; letter-spacing:.01em; transition:font-size .3s var(--ease-smooth);
+  }
+  .brand-sub{
+    font-size:.82rem; color:rgba(247,244,236,0.72); margin:0;
+    transition:opacity .25s var(--ease-smooth), max-height .25s var(--ease-smooth);
+    max-height:20px; overflow:hidden;
+  }
+
+  /* ---------- Status strip ---------- */
+  .status-strip{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+    margin:18px 4px 0;
+  }
+  .status-chip{
+    background:rgba(239,234,221,0.7);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:12px 10px;
+    text-align:center;
+    transition:transform .2s var(--ease-spring), box-shadow .2s var(--ease-smooth);
+  }
+  .status-chip:hover{transform:translateY(-2px); box-shadow:0 10px 22px -14px rgba(11,47,48,0.3);}
+  .status-chip .num{
+    font-family:var(--serif); font-weight:600; font-size:1.4rem; color:var(--teal-950); display:block; line-height:1;
+  }
+  .status-chip.accent .num{color:var(--gold-500);}
+  .status-chip .lbl{
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--ink-600); display:block; margin-top:5px;
+  }
+
+  /* ---------- Registry list ---------- */
+  main{margin-top:22px;}
+  .registry-heading{display:flex; align-items:baseline; justify-content:space-between; margin:6px 4px 10px;}
+  .registry-heading h2{
+    font-family:var(--mono); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-600); margin:0; font-weight:500;
+  }
+  .registry-heading span{font-family:var(--mono); font-size:.7rem; color:var(--ink-400);}
+
+  ul.registry{
+    list-style:none; margin:0; padding:0;
+    background:rgba(239,234,221,0.7);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--line);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 30px -14px rgba(11,47,48,0.25);
+  }
+  li.entry + li.entry{border-top:1px dashed var(--line);}
+
+  .entry-link{
+    display:grid;
+    grid-template-columns:46px 1fr auto;
+    align-items:start;
+    gap:13px;
+    padding:17px 16px;
+    position:relative;
+    overflow:hidden;
+    transition:background .22s var(--ease-smooth), transform .22s var(--ease-spring), box-shadow .22s var(--ease-smooth);
+  }
+  .entry-link:not(.is-disabled):hover,
+  .entry-link:not(.is-disabled):focus-visible{
+    background:rgba(201,162,39,0.10);
+    outline:none;
+    transform:translateY(-2px) scale(1.008);
+    box-shadow:0 10px 24px -12px rgba(201,162,39,0.35);
+    z-index:2;
+  }
+  .entry-link:not(.is-disabled):active{background:rgba(201,162,39,0.18); transform:translateY(0) scale(.99);}
+
+  .ripple{
+    position:absolute; border-radius:50%; background:rgba(201,162,39,0.35);
+    transform:scale(0); animation:ripple-out .55s var(--ease-smooth); pointer-events:none;
+  }
+  @keyframes ripple-out{to{transform:scale(1); opacity:0;}}
+
+  .entry-icon{
+    width:46px; height:46px;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(155deg, var(--teal-900), var(--teal-950));
+    box-shadow:inset 0 0 0 1px rgba(201,162,39,0.35);
+    transition:transform .25s var(--ease-spring), box-shadow .25s var(--ease-smooth);
+  }
+  .entry-icon svg{width:22px;height:22px;stroke:var(--gold-300);}
+  .entry-link:not(.is-disabled):hover .entry-icon{transform:scale(1.08) rotate(-4deg); box-shadow:inset 0 0 0 1px rgba(201,162,39,0.6), 0 6px 14px -6px rgba(201,162,39,0.5);}
+  .is-disabled .entry-icon{background:linear-gradient(155deg, #6b736f, #57615c); box-shadow:none; opacity:.5;}
+
+  .entry-body{min-width:0;}
+  .entry-top-row{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+  .entry-body h3{
+    font-family:var(--serif); font-size:1.04rem; font-weight:600; margin:0 0 4px;
+    color:var(--teal-950); line-height:1.28;
+  }
+  .entry-body p{margin:0 0 11px; font-size:.81rem; color:var(--ink-600); line-height:1.52;}
+  .entry-meta{display:flex; align-items:center; gap:10px;}
+  .entry-index{font-family:var(--mono); font-size:.66rem; color:var(--ink-400); letter-spacing:.04em;}
+  .entry-cta{
+    font-family:var(--mono); font-size:.72rem; letter-spacing:.03em; color:var(--teal-800);
+    display:inline-flex; align-items:center; gap:6px; margin-left:auto;
+  }
+  .entry-cta .arrow{transition:transform .25s var(--ease-spring);}
+  .entry-link:not(.is-disabled):hover .entry-cta .arrow{transform:translateX(5px);}
+
+  .is-disabled .entry-body h3,
+  .is-disabled .entry-index{color:var(--ink-600); opacity:.55;}
+  .is-disabled .entry-cta{color:var(--ink-600); opacity:.55;}
+  .is-disabled{cursor:default;}
+
+  .stamp{
+    font-family:var(--mono); font-size:.58rem; font-weight:500; letter-spacing:.08em;
+    padding:5px 9px; border-radius:5px; white-space:nowrap;
+    transform:rotate(-6deg); transition:transform .25s var(--ease-spring); margin-top:2px; flex:0 0 auto;
+  }
+  .entry-link:not(.is-disabled):hover .stamp{transform:rotate(0deg) scale(1.06);}
+  .stamp.live{
+    border:1.5px solid var(--gold-500); color:var(--teal-800); background:rgba(201,162,39,0.10);
+    animation:stamp-glow 2.6s ease-in-out infinite;
+  }
+  @keyframes stamp-glow{0%,100%{box-shadow:0 0 0 0 rgba(201,162,39,0.0);}50%{box-shadow:0 0 0 4px rgba(201,162,39,0.14);}}
+  .stamp.soon{border:1.5px dashed var(--brick-600); color:var(--brick-600); background:rgba(168,67,59,0.06);}
+
+  /* ---------- Install card ---------- */
+  .install-card{
+    margin:22px 4px 0;
+    padding:18px 18px 15px;
+    border-radius:18px;
+    background:
+      linear-gradient(var(--teal-950), var(--teal-950)) padding-box,
+      conic-gradient(from var(--ang,0deg), var(--gold-500), transparent 30%, var(--gold-500) 70%, transparent) border-box;
+    border:1px solid transparent;
+    color:var(--ivory-50);
+    animation:border-spin 6s linear infinite;
+    position:relative;
+  }
+  @keyframes border-spin{to{--ang:360deg;}}
+  @property --ang{syntax:'<angle>'; inherits:false; initial-value:0deg;}
+  .install-card-head{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+  .install-icon{width:30px;height:30px;flex:0 0 auto;}
+  .install-icon svg{width:100%;height:100%;stroke:var(--gold-300);}
+  .install-card h4{font-family:var(--serif); font-size:1rem; margin:0; color:var(--gold-300);}
+  .install-card p{font-size:.8rem; line-height:1.55; color:rgba(247,244,236,0.8); margin:0 0 12px;}
+  .install-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--gold-500); color:var(--teal-950); border:none;
+    padding:10px 18px; border-radius:999px; font-size:.8rem; font-weight:600; cursor:pointer;
+    transition:transform .18s var(--ease-spring), background .18s var(--ease-smooth), box-shadow .18s var(--ease-smooth);
+  }
+  .install-btn:hover{background:var(--gold-300); box-shadow:0 6px 18px -6px rgba(201,162,39,0.6);}
+  .install-btn:active{transform:scale(.94);}
+  details.manual-steps{margin-top:12px;}
+  details.manual-steps summary{
+    font-family:var(--mono); font-size:.7rem; letter-spacing:.04em; color:var(--gold-300); cursor:pointer;
+  }
+  details.manual-steps ol{margin:10px 0 0; padding-left:18px; font-size:.78rem; line-height:1.6; color:rgba(247,244,236,0.82);}
+  details.manual-steps li{margin-bottom:6px;}
+
+  footer{
+    margin:26px 4px 0; text-align:center;
+    font-family:var(--mono); font-size:.65rem; letter-spacing:.05em; color:var(--ink-400);
+  }
+  footer .foot-line{margin-top:4px; opacity:.75;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    html{scroll-behavior:auto;}
+  }
+
+  li.entry{opacity:0; filter:blur(4px); animation:rise .55s var(--ease-spring) forwards;}
+  li.entry:nth-child(1){animation-delay:.05s;}
+  li.entry:nth-child(2){animation-delay:.14s;}
+  li.entry:nth-child(3){animation-delay:.23s;}
+  li.entry:nth-child(4){animation-delay:.32s;}
+  li.entry:nth-child(5){animation-delay:.41s;}
+  @keyframes rise{from{opacity:0; transform:translateY(14px); filter:blur(4px);}to{opacity:1; transform:translateY(0); filter:blur(0);}}
+  .status-strip .status-chip{opacity:0; animation:rise .5s var(--ease-spring) forwards;}
+  .status-chip:nth-child(1){animation-delay:0s;}
+  .status-chip:nth-child(2){animation-delay:.06s;}
+  .status-chip:nth-child(3){animation-delay:.12s;}
+  .install-card, footer{opacity:0; animation:rise .55s var(--ease-spring) forwards; animation-delay:.42s;}
+</style>
+</head>
+<body>
+
+<div class="scroll-bar" id="scroll-bar"></div>
+<div class="bg-orb a"></div>
+<div class="bg-orb b"></div>
+<div class="bg-orb c"></div>
+
+<header class="letterhead" id="site-header">
+  <div class="letterhead-inner">
+    <svg class="seal-mini" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="42" fill="none" stroke="#C9A227" stroke-width="3"/>
+      <circle cx="50" cy="50" r="34" fill="none" stroke="#E4C767" stroke-width="1.4"/>
+      <text x="50" y="60" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="30" fill="#F7F4EC">IS</text>
+    </svg>
+    <div class="brand-text">
+      <p class="brand-eyebrow"><span class="dot"></span>Administrative Systems</p>
+      <h1 class="brand-title">Isra Portal Hub</h1>
+      <p class="brand-sub">One workspace for every institutional system</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="status-strip">
+    <div class="status-chip accent">
+      <span class="num">4</span>
+      <span class="lbl">Live Systems</span>
+    </div>
+    <div class="status-chip">
+      <span class="num">1</span>
+      <span class="lbl">In Development</span>
+    </div>
+    <div class="status-chip">
+      <span class="num">5</span>
+      <span class="lbl">Total Portals</span>
+    </div>
+  </div>
+
+  <main>
+    <div class="registry-heading">
+      <h2>Registered Systems</h2>
+      <span>Updated Jul 2026</span>
+    </div>
+
+    <ul class="registry" id="registry-list">
+
+      <li class="entry">
+        <a class="entry-link" href="https://ali19121.github.io/daak/">
+          <span class="entry-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>
+            </svg>
+          </span>
+          <span class="entry-body">
+            <span class="entry-top-row">
+              <h3>Mail Correspondence Management</h3>
+            </span>
+            <p>Log, track, and archive official correspondence in a structured digital record.</p>
+            <span class="entry-meta">
+              <span class="entry-index">No. 01</span>
+              <span class="entry-cta">Open Portal <span class="arrow">→</span></span>
+            </span>
+          </span>
+          <span class="stamp live">LIVE</span>
+        </a>
+      </li>
+
+      <li class="entry">
+        <a class="entry-link" href="https://ali19121.github.io/isra-portal/">
+          <span class="entry-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v3h6V3"/><path d="M8 12l2.5 2.5L16 9"/>
+            </svg>
+          </span>
+          <span class="entry-body">
+            <span class="entry-top-row">
+              <h3>School Test Portal</h3>
+            </span>
+            <p>Manage school assessments, test schedules, and results in one dashboard.</p>
+            <span class="entry-meta">
+              <span class="entry-index">No. 02</span>
+              <span class="entry-cta">Open Portal <span class="arrow">→</span></span>
+            </span>
+          </span>
+          <span class="stamp live">LIVE</span>
+        </a>
+      </li>
+
+      <li class="entry">
+        <a class="entry-link" href="https://ali19121.github.io/isra-fehm-portal/">
+          <span class="entry-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 014 18.5v-13z"/>
+              <path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 001.5-1.5v-13z"/>
+            </svg>
+          </span>
+          <span class="entry-body">
+            <span class="entry-top-row">
+              <h3>Fehm-ul-Quran Course Management</h3>
+            </span>
+            <p>Administer enrolment, scheduling, and course operations for the Fehm-ul-Quran program.</p>
+            <span class="entry-meta">
+              <span class="entry-index">No. 03</span>
+              <span class="entry-cta">Open Portal <span class="arrow">→</span></span>
+            </span>
+          </span>
+          <span class="stamp live">LIVE</span>
+        </a>
+      </li>
+
+      <li class="entry">
+        <a class="entry-link" href="https://ali19121.github.io/isra-quran-academy/">
+          <span class="entry-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 9l10-5 10 5-10 5-10-5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/>
+            </svg>
+          </span>
+          <span class="entry-body">
+            <span class="entry-top-row">
+              <h3>Isra Quran Academy</h3>
+            </span>
+            <p>Manage Quran academy enrolments, class schedules, and student progress records.</p>
+            <span class="entry-meta">
+              <span class="entry-index">No. 04</span>
+              <span class="entry-cta">Open Portal <span class="arrow">→</span></span>
+            </span>
+          </span>
+          <span class="stamp live">LIVE</span>
+        </a>
+      </li>
+
+      <li class="entry">
+        <span class="entry-link is-disabled" aria-disabled="true">
+          <span class="entry-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 21V7l8-4 8 4v14"/><path d="M9 21v-6h6v6"/><path d="M9 11h.01M15 11h.01M9 15h.01M15 15h.01"/>
+            </svg>
+          </span>
+          <span class="entry-body">
+            <span class="entry-top-row">
+              <h3>Schools Management &amp; ERP</h3>
+            </span>
+            <p>A unified ERP system for full school operations — enrolment, staff, and finance.</p>
+            <span class="entry-meta">
+              <span class="entry-index">No. 05</span>
+              <span class="entry-cta">In Development</span>
+            </span>
+          </span>
+          <span class="stamp soon">SOON</span>
+        </span>
+      </li>
+
+    </ul>
+
+    <div class="install-card">
+      <div class="install-card-head">
+        <span class="install-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/><path d="M9 6l3 3 3-3" transform="translate(0,-1)"/>
+          </svg>
+        </span>
+        <h4>Install on Your Device</h4>
+      </div>
+      <p>Add this hub to your home screen for one-tap access to every portal — just like a native app.</p>
+      <button class="install-btn" id="install-btn" hidden>Install App</button>
+      <details class="manual-steps">
+        <summary>Manual install steps</summary>
+        <ol>
+          <li><strong>Android / Chrome:</strong> tap the ⋮ menu in the top right, then choose "Add to Home screen" or "Install app."</li>
+          <li><strong>iPhone / Safari:</strong> tap the Share icon (☐↑), then choose "Add to Home Screen."</li>
+        </ol>
+      </details>
+    </div>
+  </main>
+
+  <footer>
+    <div>Isra Institutional Portal Registry</div>
+    <div class="foot-line">© <span id="year"></span> · All systems linked, not embedded</div>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+    });
+  }
+
+  let deferredPrompt;
+  const installBtn = document.getElementById('install-btn');
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.hidden = false;
+  });
+  installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    installBtn.hidden = true;
+  });
+  window.addEventListener('appinstalled', () => { installBtn.hidden = true; });
+
+  const scrollBar = document.getElementById('scroll-bar');
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    scrollBar.style.width = (isNaN(pct) ? 0 : pct) + '%';
+    header.classList.toggle('is-compact', h.scrollTop > 24);
+  }, { passive: true });
+
+  document.querySelectorAll('.entry-link:not(.is-disabled)').forEach((el) => {
+    el.addEventListener('pointerdown', (e) => {
+      const rect = el.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      const size = Math.max(rect.width, rect.height) * 1.4;
+      ripple.className = 'ripple';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+      el.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    });
+  });
+</script>
+
+</body>
+</html>
